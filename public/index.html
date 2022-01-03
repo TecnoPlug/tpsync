@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="css/angular-material.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body ng-app="app">
+    <div ng-controller="MainController">
+        <div class="flexbox-parent" ng-if="loading">
+            <div layout="row" layout-align="center center" style="height: 100vh">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
+        <div class="flexbox-parent" ng-if="!loading && info.data.licencias.length > 0">
+            <md-content>
+                <md-toolbar class="md-hue-2">
+                    <div class="md-toolbar-tools">
+
+                        <h2 flex md-truncate>Servicio de sincronización</h2>
+
+                        <span flex></span>
+                        <md-button class="md-icon-button" aria-label="Favorite" ng-click="requestLicense(true)">
+                            <md-icon md-font-set="material-icons">my_library_add</md-icon>
+                        </md-button>
+
+                    </div>
+                </md-toolbar>
+                <section layout="row" flex style="height: 100vh">
+                    <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"
+                        md-whiteframe="4">
+
+                        <md-toolbar layout="row" class="md-hue-3">
+                            <div class="md-toolbar-tools">
+                                <span>Licencias</span>
+                            </div>
+                        </md-toolbar>
+                        <md-content layout-padding>
+                            <md-list flex>
+                                <md-list-item class="md-3-line" ng-repeat="item in info.data.licencias">
+                                    <div class="md-list-item-text" layout="column">
+                                        <h3>{{ item.data.servicio }}</h3>
+                                        <h4>{{ item.data.sistema }}</h4>
+                                        <p>{{ item.id }}</p>
+                                    </div>
+                                </md-list-item>
+                                <md-divider></md-divider>
+                                <md-list-item>
+                                    <md-button ng-click="requestLicense(true)">Agregar licencia</md-button>
+                                </md-list-item>
+                            </md-list>
+
+                        </md-content>
+
+                    </md-sidenav>
+
+                    <md-content flex>
+
+                        <md-toolbar layout="row">
+                            <div class="md-toolbar-tools">
+                                <span>Log de eventos</span>
+                            </div>
+                        </md-toolbar>
+
+                        <div layout="column" layout-padding>
+                            <md-list flex>
+                                <md-list-item flex class="md-3-line" ng-repeat="item in info.eventos | orderBy:'-'">
+                                    <div flex layout="row">
+                                        <div flex="10">
+                                            <p ng-class="{ 'text-danger' : item.tipo=='Error' }">{{ item.tipo }}</p>
+                                        </div>
+                                        <div flex="">
+                                            <div class="md-list-item-text" layout="column">
+                                                <h3 ng-class="{ 'text-danger' : item.tipo=='Error' }">{{ item.evento }}
+                                                </h3>
+                                                <h4 class="text-primary">{{ item.fecha }}</h4>
+                                                <p>{{ item.licencia }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </md-list-item>
+                                <p ng-if="info.eventos.length==0">Nada por ahora</p>
+                            </md-list>
+                        </div>
+
+                        <div flex></div>
+
+                    </md-content>
+                </section>
+            </md-content>
+        </div>
+    </div>
+
+    <script src="/modules/angular/angular.js"></script>
+    <script src="/modules/angular-aria/angular-aria.js"></script>
+    <script src="/modules/angular-animate/angular-animate.js"></script>
+    <script src="/modules/angular-messages/angular-messages.js"></script>
+    <script src="/modules/angular-material/angular-material.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+
+</html>
